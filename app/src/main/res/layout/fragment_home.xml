@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:scrollbars="none"
+    android:fillViewport="true"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="vn.edu.poly.spotify.ui.home.PlayListFragment"
+            android:id="@+id/playlist_fragment"/>
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="vn.edu.poly.spotify.ui.home.ChudeTheloaiFragment"
+            android:id="@+id/chude_fragment"/>
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="vn.edu.poly.spotify.ui.home.AlbumFragment"
+            android:id="@+id/album_fragment"/>
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="vn.edu.poly.spotify.ui.home.ArtistsFragment"
+            android:id="@+id/artists_fragment"/>
+
+    </LinearLayout>
+
+</ScrollView>
