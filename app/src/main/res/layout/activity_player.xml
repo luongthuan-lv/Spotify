@@ -5,181 +5,190 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PlayerActivity">
+
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:id="@+id/imgBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/chevron" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvTenBaiHat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="clip_horizontal|center"
         android:text="TextView"
+        android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.435"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tvTenCaSi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTenBaiHat" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="32dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgSinger"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/sontung"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTenCaSi" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
+    <com.triggertrap.seekarc.SeekArc
+        android:id="@+id/seekArc"
+        rotation="180"
+        startAngle="10"
+        sweepAngle="300"
+        touchInside="true"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:max="10"
-        android:progress="3"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="21dp"
+        android:padding="60dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTenCaSi" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tvTimeStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="160dp"
         android:text="00:00"
-        app:layout_constraintEnd_toStartOf="@+id/seekBar"
-        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintEnd_toStartOf="@+id/seekArc"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTenCaSi" />
+
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tvTimeEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:text="00:00"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekBar"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintHorizontal_bias="0.644"
+        app:layout_constraintStart_toEndOf="@+id/seekArc"
+        app:layout_constraintTop_toBottomOf="@+id/tvTenCaSi" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@color/colorAccent"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgPlay"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/play"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
-        app:srcCompat="@drawable/pause"
-        tools:ignore="VectorDrawableCompat" />
+        app:layout_constraintTop_toBottomOf="@+id/seekArc" />
 
     <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintEnd_toStartOf="@+id/imageView3"
-        app:layout_constraintHorizontal_bias="0.651"
+        android:id="@+id/imgPrevious"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="38dp"
+        app:layout_constraintEnd_toStartOf="@+id/imgPlay"
+        app:layout_constraintHorizontal_bias="0.721"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/seekArc"
         app:srcCompat="@drawable/previous"
         tools:ignore="VectorDrawableCompat" />
 
     <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        android:id="@+id/imgNext"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="38dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.35"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toEndOf="@+id/imgPlay"
+        app:layout_constraintTop_toBottomOf="@+id/seekArc"
         app:srcCompat="@drawable/next"
         tools:ignore="VectorDrawableCompat" />
 
     <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintEnd_toStartOf="@+id/imageView3"
-        app:layout_constraintHorizontal_bias="0.18"
+        android:id="@+id/imgShufle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="38dp"
+        app:layout_constraintEnd_toStartOf="@+id/imgPrevious"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/seekArc"
         app:srcCompat="@drawable/shuffle"
         tools:ignore="VectorDrawableCompat" />
 
     <ImageView
-        android:background="@color/colorAccent"
-        android:id="@+id/imageView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        android:id="@+id/imgRepeat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="38dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:layout_constraintHorizontal_bias="0.603"
+        app:layout_constraintStart_toEndOf="@+id/imgNext"
+        app:layout_constraintTop_toBottomOf="@+id/seekArc"
         app:srcCompat="@drawable/repeat"
         tools:ignore="VectorDrawableCompat" />
 
     <ImageView
-        android:background="@color/colorAccent"
-        android:id="@+id/imageView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/imgVolumeoff"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:srcCompat="@drawable/volume_down"
+        app:layout_constraintTop_toBottomOf="@+id/imgPlay"
+        app:srcCompat="@drawable/volume_off"
         tools:ignore="VectorDrawableCompat" />
 
     <SeekBar
-        android:id="@+id/seekBar2"
-        android:layout_width="300dp"
+        android:id="@+id/seekBarVolume"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView8"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintStart_toEndOf="@+id/imgVolumeoff"
+        app:layout_constraintTop_toBottomOf="@+id/imgPlay" />
 
     <ImageView
-        android:id="@+id/imageView9"
+        android:id="@+id/imgVolumeup"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:background="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekBar2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imgPlay"
         app:srcCompat="@drawable/volume_up"
         tools:ignore="VectorDrawableCompat" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

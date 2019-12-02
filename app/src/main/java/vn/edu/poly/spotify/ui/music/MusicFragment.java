@@ -1,5 +1,6 @@
 package vn.edu.poly.spotify.ui.music;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
@@ -89,9 +90,12 @@ public class MusicFragment extends Fragment {
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {MediaStore.Audio.AudioColumns.DATA, MediaStore.Audio.AudioColumns.ALBUM, MediaStore.Audio.ArtistColumns.ARTIST, MediaStore.Audio.AudioColumns.TITLE, MediaStore.Audio.AlbumColumns.ALBUM_ID,MediaStore.Audio.Media.DISPLAY_NAME,MediaStore.Audio.Media._ID,MediaStore.Audio.Media.TRACK,};
+        String[] genre={MediaStore.Audio.Genres.NAME,MediaStore.Audio.Genres._ID};
+        String[] genremember={MediaStore.Audio.Genres.Members._ID};
+
         Cursor c = context.getContentResolver().query(uri, projection, null, null, null);
 
-        if (c != null) {
+        if (c != null && c.getCount()>0) {
             while (c.moveToNext()) {
 
                 Music music = new Music();
@@ -101,11 +105,19 @@ public class MusicFragment extends Fragment {
                 String name = c.getString(3);
                 String playlist = c.getString(4);
                 String data=c.getString(5);
-
                 int id=c.getInt(6);
-                String genrer=c.getString(7);
+                String track=c.getString(7);
+               // String genres=c.getString(8);
 
-
+//                 mmr = new MediaMetadataRetriever();
+//
+//                Uri trackUri = ContentUris.withAppendedId(
+//                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,id);
+//                Log.e("TrackUri",trackUri.toString());
+//
+//                mmr.setDataSource(getActivity(), trackUri);
+//
+//                String thisGenre = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE);
 //                FFmpegMediaMetadataRetriever retriever = new FFmpegMediaMetadataRetriever();
 //                retriever.setDataSource(path);
 //                byte [] datas = retriever.getEmbeddedPicture();
@@ -122,13 +134,14 @@ public class MusicFragment extends Fragment {
                 music.setNamesong(name);
                 music.setAlbum(album);
                 music.setNameartist(artist);
-                music.setData(path);
+                music.setData(data);
                 music.setId(id);
 
 
                 Log.e("Name :" + name, " Album :" + album);
                 Log.e("Playlist :" + playlist, " Artist :" + artist);
-                Log.e("Gener :" + genrer, " Id :" + id);
+                Log.e("Path :" + path, " Id :" + id);
+              //  Log.e("Track :" + track, " Genres :" + thisGenre);
                 Log.e("+++++++++++", "++++++++++++");
 
                 tempAudioList.add(music);

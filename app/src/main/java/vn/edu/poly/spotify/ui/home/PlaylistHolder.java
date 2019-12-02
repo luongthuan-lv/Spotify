@@ -13,8 +13,6 @@ class PlaylistHolder extends RecyclerView.ViewHolder {
     public TextView tvNamePlaylist;
     public PlaylistHolder(@NonNull View itemView) {
         super(itemView);
-        imgBackground_playlist=itemView.findViewById(R.id.imgBackground_playlist);
-        imgPlaylist=itemView.findViewById(R.id.imgPlaylist);
-        tvNamePlaylist=itemView.findViewById(R.id.tvNamePlaylist);
+
     }
 }

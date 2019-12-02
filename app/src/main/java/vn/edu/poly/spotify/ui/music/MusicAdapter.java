@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MusicHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MusicHolder holder, final int position) {
 
 
         final Music music = musicList.get(position);
@@ -75,9 +76,10 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicHolder> {
         holder.ctSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               // String songname=musicList.get(position).getNamesong();
                 Toast.makeText(context,music.namesong,Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(context, PlayerActivity.class);
-                context.startActivity(intent);
+               context.startActivity(new Intent(context,PlayerActivity.class).putExtra("songname",music.namesong).putExtra("songimage",music.image).putExtra("nameartist",music.nameartist).putExtra("size",musicList.size()).putExtra("pos",position));
+
             }
         });
         holder.imgLove.setOnClickListener(new View.OnClickListener() {
