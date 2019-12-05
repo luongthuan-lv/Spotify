@@ -36,6 +36,6 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:2.1.0"
     implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
     implementation 'com.karumi:dexter:6.0.0'
-    compile "com.github.semoncat.seekarc:library:+"
+    implementation "com.github.semoncat.seekarc:library:+"
     implementation 'de.hdodenhof:circleimageview:3.0.1'
 }
