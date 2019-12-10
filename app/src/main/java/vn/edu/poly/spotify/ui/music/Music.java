@@ -1,12 +1,16 @@
 package vn.edu.poly.spotify.ui.music;
 
 
+import android.graphics.Bitmap;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity
-public class Music {
+public class Music implements Serializable {
 
 
     public int idsong;
@@ -26,7 +30,15 @@ public class Music {
     public String data;
     public String playlist;
     public String album;
+    public String genrename;
 
+    public String getGenrename() {
+        return genrename;
+    }
+
+    public void setGenrename(String genrename) {
+        this.genrename = genrename;
+    }
 
     public int getIdsong() {
         return idsong;

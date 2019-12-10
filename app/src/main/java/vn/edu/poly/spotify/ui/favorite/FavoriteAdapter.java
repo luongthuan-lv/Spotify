@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import vn.edu.poly.spotify.R;
@@ -43,14 +45,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteHolder> {
         final Music music = musicList.get(position);
         holder.tvNameSongfvr.setText(music.namesong);
         holder.tvNameArtistfvr.setText(music.nameartist);
-
-        FFmpegMediaMetadataRetriever retriever = new FFmpegMediaMetadataRetriever();
-        retriever.setDataSource(music.getImage());
-        byte[] datas = retriever.getEmbeddedPicture();
-        Bitmap bitmap = BitmapFactory.decodeByteArray(datas, 0, datas.length);
-        retriever.release();
-
-        holder.imgArtistfvr.setImageBitmap(bitmap);
+        Glide.with(context).load(music.getImage()).into(holder.imgArtistfvr);
         holder.imgUnlove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

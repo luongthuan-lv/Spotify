@@ -3,6 +3,8 @@ package vn.edu.poly.spotify.ui.music;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import androidx.room.Room;
 import java.util.ArrayList;
 import java.util.List;
 import vn.edu.poly.spotify.R;
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class MusicFragment extends Fragment {
 
@@ -30,7 +33,16 @@ public class MusicFragment extends Fragment {
     List<Music> tempAudioList = new ArrayList<>();
     View root;
     MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+    private int genreId;
+    private String genreName;
 
+
+
+
+//    public GenresFragment(int genreId, String genreName) {
+//        this.genreId = genreId;
+//        this.genreName = genreName;
+//    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,48 +62,24 @@ public class MusicFragment extends Fragment {
         return root;
     }
 
-//    public ArrayList<File> findSong(File file) {
-//        ArrayList<File> arrayList = new ArrayList<>();
-//       // File folderPath = new File(getFragmentManager() + "/" + getResources().getString(R.string.app_name));
-//        File[] files = file.listFiles();
-//
-//        for (File singFile : files) {
-//            if (singFile.isDirectory() && !singFile.isHidden()) {
-//
-//                arrayList.addAll(findSong(singFile));
-//            } else {
-//                if (singFile.getName().endsWith(".mp3") || singFile.getName().endsWith(".wav")) {
-//                    arrayList.add(singFile);
-//                }
-//            }
-//
-//        }
-//        return arrayList;
-//    }
 
-//    public void display() {
-//         ArrayList<File> mySongs = findSong(new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
-//       // items = new String[mySongs.size()];
-//        for (int i = 0; i < mySongs.size(); i++) {
-//            //items[i] = mySongs.get(i).getName().toString().replace(".mp3", "").replace(".wav", "");
-//            Toast.makeText(getActivity(),mySongs.get(i).getName().toString(),Toast.LENGTH_SHORT).show();
-//        }
-////        musicList=new ArrayList<>();
-////        musicAdapter=new MusicAdapter(getActivity(),musicList);
-////        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
-////        rvSong.setLayoutManager(linearLayoutManager);
-////        rvSong.setAdapter(musicAdapter);
-//
-//
-//    }
 
+    private static Uri getAlbumArtUri(int albumId) {
+        return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumId);
+    }
     public List<Music> getAllAudioFromDevice(final Context context) {
 
-
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {MediaStore.Audio.AudioColumns.DATA, MediaStore.Audio.AudioColumns.ALBUM, MediaStore.Audio.ArtistColumns.ARTIST, MediaStore.Audio.AudioColumns.TITLE, MediaStore.Audio.AlbumColumns.ALBUM_ID,MediaStore.Audio.Media.DISPLAY_NAME,MediaStore.Audio.Media._ID,MediaStore.Audio.Media.TRACK,};
-        String[] genre={MediaStore.Audio.Genres.NAME,MediaStore.Audio.Genres._ID};
-        String[] genremember={MediaStore.Audio.Genres.Members._ID};
+        String[] projection = {
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ALBUM_ID,
+                MediaStore.Audio.Media.DISPLAY_NAME,
+
+                };
+
 
         Cursor c = context.getContentResolver().query(uri, projection, null, null, null);
 
@@ -105,42 +93,21 @@ public class MusicFragment extends Fragment {
                 String name = c.getString(3);
                 String playlist = c.getString(4);
                 String data=c.getString(5);
-                int id=c.getInt(6);
-                String track=c.getString(7);
+
                // String genres=c.getString(8);
 
-//                 mmr = new MediaMetadataRetriever();
-//
-//                Uri trackUri = ContentUris.withAppendedId(
-//                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,id);
-//                Log.e("TrackUri",trackUri.toString());
-//
-//                mmr.setDataSource(getActivity(), trackUri);
-//
-//                String thisGenre = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE);
-//                FFmpegMediaMetadataRetriever retriever = new FFmpegMediaMetadataRetriever();
-//                retriever.setDataSource(path);
-//                byte [] datas = retriever.getEmbeddedPicture();
-//
-//// convert the byte array to a bitmap
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(datas, 0, datas.length);
-//// do something with the image ...
-//// mImageView.setImageBitmap(bitmap);
-//
-//
-//                retriever.release();
-              //  Log.e("Bitmap",bitmap+"");
-                music.setImage(path);
+                int albumId = c.getInt(c.getColumnIndex(MediaStore.Audio.Genres.Members.ALBUM_ID));
+                music.setImage(String.valueOf(getAlbumArtUri(albumId)));
                 music.setNamesong(name);
                 music.setAlbum(album);
                 music.setNameartist(artist);
-                music.setData(data);
-                music.setId(id);
+                music.setData(path);
+                //music.setId(id);
 
 
                 Log.e("Name :" + name, " Album :" + album);
                 Log.e("Playlist :" + playlist, " Artist :" + artist);
-                Log.e("Path :" + path, " Id :" + id);
+               // Log.e("Data :" + data, " genres :" + genresname);
               //  Log.e("Track :" + track, " Genres :" + thisGenre);
                 Log.e("+++++++++++", "++++++++++++");
 
@@ -150,6 +117,35 @@ public class MusicFragment extends Fragment {
             c.close();
         }
 
+        return tempAudioList;
+    }
+
+
+
+    public List<Music> getMusicList(final Context context) {
+
+       Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Genres.Members.getContentUri("external", genreId), null, null, null, null);
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Music music = new Music();
+                music.setGenrename(genreName);
+                music.setNamesong(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Genres.Members.TITLE)));
+                int albumId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Genres.Members.ALBUM_ID));
+                music.setImage(String.valueOf(getAlbumArtUri(albumId)));
+                music.setNameartist(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Genres.Members.ARTIST)));
+              //  music.setTime(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Genres.Members.DURATION)));
+                music.setImage(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Genres.Members.DATA)));
+                music.setAlbum(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM)));
+                tempAudioList.add(music);
+                cursor.moveToNext();
+                Log.e("Name :" + cursor.getColumnIndex(MediaStore.Audio.Genres.Members.TITLE), " Artist :" + cursor.getColumnIndex(MediaStore.Audio.Genres.Members.ARTIST));
+
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
         return tempAudioList;
     }
 

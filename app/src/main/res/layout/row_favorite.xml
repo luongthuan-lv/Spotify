@@ -72,7 +72,7 @@
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/broken_heart"
+        app:srcCompat="@drawable/favoriteblack"
         tools:ignore="VectorDrawableCompat" />
 
 

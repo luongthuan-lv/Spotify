@@ -13,6 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.io.Serializable;
 import java.util.List;
 
 import vn.edu.poly.spotify.PlayerActivity;
@@ -28,25 +31,8 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicHolder> {
     public MusicAdapter(Context context, List<Music> musicList, AppDataBase appDataBase) {
         this.context = context;
         this.musicList = musicList;
-        this.appDataBase=appDataBase;
+        this.appDataBase = appDataBase;
     }
-//    public ArrayList<File> findSong(File file) {
-//        ArrayList<File> arrayList = new ArrayList<>();
-//        File[] files = file.listFiles();
-//
-//        for (File singFile : files) {
-//            if (singFile.isDirectory() && !singFile.isHidden()) {
-//                arrayList.addAll(findSong(singFile));
-//            } else {
-//                if (singFile.getName().endsWith(".mp3") || singFile.getName().endsWith(".wav")) {
-//                    arrayList.add(singFile);
-//                }
-//            }
-//
-//        }
-//        return arrayList;
-//    }
-
 
 
 
@@ -58,47 +44,67 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicHolder> {
         return musicHolder;
     }
 
+    //    private void Bitmap(){
+//        final Music music = musicList.get(position);
+//        FFmpegMediaMetadataRetriever retriever = new FFmpegMediaMetadataRetriever();
+//        retriever.setDataSource(music.getImage());
+//        byte[] datas = retriever.getEmbeddedPicture();
+//        Bitmap bitmap = BitmapFactory.decodeByteArray(datas, 0, datas.length);
+//        retriever.release()
+//
+//    }
     @Override
     public void onBindViewHolder(@NonNull final MusicHolder holder, final int position) {
 
-
         final Music music = musicList.get(position);
-        FFmpegMediaMetadataRetriever retriever = new FFmpegMediaMetadataRetriever();
-        retriever.setDataSource(music.getImage());
-        byte [] datas = retriever.getEmbeddedPicture();
-        Bitmap bitmap = BitmapFactory.decodeByteArray(datas, 0, datas.length);
-        retriever.release();
 
-        holder.imgArtist.setImageBitmap(bitmap);
+        Glide.with(context).load(music.getImage()).into(holder.imgArtist);
         holder.tvNameSong.setText(music.getNamesong());
         holder.tvNameArtist.setText(music.getNameartist());
 
         holder.ctSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // String songname=musicList.get(position).getNamesong();
-                Toast.makeText(context,music.namesong,Toast.LENGTH_SHORT).show();
-               context.startActivity(new Intent(context,PlayerActivity.class).putExtra("songname",music.namesong).putExtra("songimage",music.image).putExtra("nameartist",music.nameartist).putExtra("size",musicList.size()).putExtra("pos",position));
-
+                Toast.makeText(context, music.namesong, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, PlayerActivity.class);
+                intent.putExtra("songname", music.namesong);
+                intent.putExtra("songimage", music.image);
+                intent.putExtra("nameartist", music.nameartist);
+                intent.putExtra("size", musicList.size());
+                intent.putExtra("musiclist", (Serializable) musicList);
+                intent.putExtra("pos", position);
+                intent.putExtra("data",music.data);
+                context.startActivity(intent);
+                Log.e("Size1111111111",musicList.size()+"");
             }
         });
         holder.imgLove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                try{
-                    long[] result=appDataBase.musicDao().insert(music);
-                    if (result!=null){
+                try {
+                    long[] result = appDataBase.musicDao().insert(music);
+                    if (result != null) {
                         holder.imgLove.setImageResource(R.drawable.favorite1);
-                        Toast.makeText(context,"Bạn thích bài hát: "+music.namesong,Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(context,"Lỗi khi thích bài hát: "+music.namesong,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Bạn thích bài hát: " + music.namesong, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Lỗi khi thích bài hát: " + music.namesong, Toast.LENGTH_SHORT).show();
                     }
-                }catch (Exception e){
-                    Toast.makeText(context,"Bạn đã thích bài hát này rồi",Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(context, "Bạn đã thích bài hát này rồi", Toast.LENGTH_SHORT).show();
                 }
-
             }
+//                if (love==false){
+//
+//                    appDataBase.musicDao().delete(music);
+//                    musicList.remove(position);
+//                    notifyDataSetChanged();
+//
+//                    Toast.makeText(context, "Đã bỏ thích bài hát: " + music.namesong, Toast.LENGTH_SHORT).show();
+//                    love=true;
+//                }
+
+
         });
     }
 

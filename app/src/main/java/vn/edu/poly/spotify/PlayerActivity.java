@@ -17,27 +17,30 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.triggertrap.seekarc.SeekArc;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Random;
 
 import vn.edu.poly.spotify.ui.music.Music;
 import vn.edu.poly.spotify.ui.music.MusicFragment;
 import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class PlayerActivity extends AppCompatActivity {
-    ImageView imgBack, imgSinger, imgPlay, imgPrevious, imgNext, imgShufle, imgRepeat, imgVolumeoff, imgVolumeup;
+    ImageView imgBack, imgSinger, imgPlay, imgPrevious, imgNext, imgShufle, imgRepeat;
     TextView tvTenBaiHat, tvTenCaSi, tvTimeStart, tvTimeEnd;
     SeekBar seekBarVolume;
     MediaPlayer mp;
     SeekArc seekArc;
-    Animation animation,animation1;
+    Animation animation, animation1;
     ArrayList<Music> musicArrayList;
-    String nameimage, namesong, nameartist;
-    int size,position,pos;
-    Boolean play;
+    String data, namesong, nameartist,img;
+    int size, position, pos;
+    boolean repeat = false, random = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +51,7 @@ public class PlayerActivity extends AppCompatActivity {
         initialization();
         click();
 
-        FFmpegMediaMetadataRetriever retriever = new FFmpegMediaMetadataRetriever();
-        retriever.setDataSource(nameimage);
-        byte[] datas = retriever.getEmbeddedPicture();
-        Bitmap bitmap = BitmapFactory.decodeByteArray(datas, 0, datas.length);
-        retriever.release();
-        imgSinger.setImageBitmap(bitmap);
+        Glide.with(PlayerActivity.this).load(img).into(imgSinger);
     }
 
     private void innit() {
@@ -64,14 +62,12 @@ public class PlayerActivity extends AppCompatActivity {
         imgNext = findViewById(R.id.imgNext);
         imgShufle = findViewById(R.id.imgShufle);
         imgRepeat = findViewById(R.id.imgRepeat);
-        imgVolumeoff = findViewById(R.id.imgVolumeoff);
-        imgVolumeup = findViewById(R.id.imgVolumeup);
         tvTenBaiHat = findViewById(R.id.tvTenBaiHat);
         tvTenCaSi = findViewById(R.id.tvTenCaSi);
         tvTimeStart = findViewById(R.id.tvTimeStart);
         tvTimeEnd = findViewById(R.id.tvTimeEnd);
         seekArc = findViewById(R.id.seekArc);
-        musicArrayList=new ArrayList<>();
+
         seekBarVolume = findViewById(R.id.seekBarVolume);
         animation = AnimationUtils.loadAnimation(this, R.anim.disc);
         animation1 = AnimationUtils.loadAnimation(this, R.anim.stopdisc);
@@ -79,19 +75,38 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void Interactive() {
         Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        musicArrayList = (ArrayList<Music>) bundle.getSerializable("musiclist");
         namesong = intent.getStringExtra("songname");
-        nameimage = intent.getStringExtra("songimage");
+        data = intent.getStringExtra("data");
         nameartist = intent.getStringExtra("nameartist");
-        size=intent.getIntExtra("size",0);
-        pos=intent.getIntExtra("pos",0);
-        Log.e("size",size+"");
+        img=intent.getStringExtra("songimage");
+        size = intent.getIntExtra("size", 0);
+        pos = intent.getIntExtra("pos", 0);
+        Log.e("size", musicArrayList + "");
 
 
     }
-    private void click(){
+
+    private void click() {
         imgPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (mp.isPlaying()) {
+                    mp.pause();
+                    imgPlay.setImageResource(R.drawable.play);
+                    imgSinger.startAnimation(animation1);
+                    settimetotal();
+                    Updatetime();
+                } else {
+                    mp.start();
+                    imgPlay.setImageResource(R.drawable.pause);
+                    imgSinger.startAnimation(animation);
+                    settimetotal();
+                    Updatetime();
+                }
+
 
             }
         });
@@ -100,26 +115,99 @@ public class PlayerActivity extends AppCompatActivity {
         imgNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                position++;
-                if (position>size-1){
-                    position=0;
+
+                if (musicArrayList.size() > 0) {
+
+                    if (mp.isPlaying() || mp != null) {
+                        mp.stop();
+                        mp.release();
+                        mp = null;
+                    }
+                    if (position < musicArrayList.size()) {
+                        imgPlay.setImageResource(R.drawable.pause);
+                        position++;
+                        if (repeat == true) {
+                            if (position == 0) {
+                                position = musicArrayList.size();
+                            }
+                            position -= 1;
+                        }
+                        if (random == true) {
+                            Random random = new Random();
+                            int index = random.nextInt(musicArrayList.size());
+                            if (index == position) {
+                                position = index - 1;
+                            }
+                            position = index;
+                        }
+                        if (position > musicArrayList.size() - 1) {
+                            position = 0;
+                        }
+                    }
+               }
+
+                imgPrevious.setClickable(false);
+                imgNext.setClickable(false);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        imgPrevious.setClickable(true);
+                        imgNext.setClickable(true);
+                    }
+                }, 3000);
+                try {
+                    initialization1();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                if (mp.isPlaying()){
-                    mp.stop();
-                    mp.release();
-                }
-                initialization();
                 mp.start();
                 imgPlay.setImageResource(R.drawable.pause);
                 settimetotal();
                 Updatetime();
-                //imgSinger.startAnimation(animation);
+
             }
         });
 
         imgPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (size > 0) {
+
+                    if (mp.isPlaying() || mp != null) {
+                        mp.stop();
+                        mp.release();
+                        mp = null;
+                    }
+                    if (position < size) {
+                        imgPlay.setImageResource(R.drawable.pause);
+                        position--;
+                        if (position < 0) {
+                            position = size - 1;
+                        }
+                        if (repeat == true) {
+                            position += 1;
+                        }
+                        if (random == true) {
+                            Random random = new Random();
+                            int index = random.nextInt(size);
+                            if (index == position) {
+                                position = index - 1;
+                            }
+                            position = index;
+                        }
+                    }
+                }
+
+                try {
+                    initialization1();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mp.start();
+                imgPlay.setImageResource(R.drawable.pause);
+                settimetotal();
+                Updatetime();
 
             }
         });
@@ -127,29 +215,90 @@ public class PlayerActivity extends AppCompatActivity {
         imgRepeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (repeat == false) {
+                    if (random == true) {
+                        random = false;
+                        imgRepeat.setImageResource(R.drawable.rep1);
+                        imgShufle.setImageResource(R.drawable.shu2);
 
+                    }
+                    imgRepeat.setImageResource(R.drawable.rep1);
+                    repeat = true;
+                } else {
+                    imgRepeat.setImageResource(R.drawable.rep2);
+                    repeat = false;
+                }
             }
         });
 
         imgShufle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (random == false) {
+                    if (repeat == true) {
+                        repeat = false;
+                        imgShufle.setImageResource(R.drawable.shu1);
+                        imgRepeat.setImageResource(R.drawable.rep2);
 
+                    }
+                    imgShufle.setImageResource(R.drawable.shu1);
+                    random = true;
+                } else {
+                    imgShufle.setImageResource(R.drawable.shu2);
+                    random = false;
+                }
+            }
+        });
+
+        seekArc.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
+            @Override
+            public void onProgressChanged(SeekArc seekArc, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekArc seekArc) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekArc seekAra) {
+                mp.seekTo(seekArc.getArcRotation());
+
+            }
+        });
+
+        seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mp.seekTo(seekBar.getProgress());
             }
         });
     }
 
 
-
     public void initialization() {
-         mp= new MediaPlayer();
+        mp = new MediaPlayer();
         try {
-
-            mp.setDataSource(nameimage);
+            position = pos;
+            mp.setDataSource(data);
             mp.prepare();
             mp.start();
             imgPlay.setImageResource(R.drawable.pause);
             imgSinger.startAnimation(animation);
+            Log.e("p00000000000", position + "");
+            settimetotal();
+            Updatetime();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -159,51 +308,102 @@ public class PlayerActivity extends AppCompatActivity {
         tvTenCaSi.setText(nameartist);
     }
 
-    public void settimetotal(){
-        SimpleDateFormat dinhdang=new SimpleDateFormat("mm:ss");
+    public void initialization1() throws IOException {
+        mp = new MediaPlayer();
+        mp.setDataSource(musicArrayList.get(position).data);
+        mp.prepare();
+        mp.start();
+        imgPlay.setImageResource(R.drawable.pause);
+        imgSinger.startAnimation(animation);
+        tvTenBaiHat.setText(musicArrayList.get(position).namesong);
+        tvTenCaSi.setText(musicArrayList.get(position).nameartist);
+        Glide.with(PlayerActivity.this).load(img).into(imgSinger);
+    }
+
+    public void settimetotal() {
+        SimpleDateFormat dinhdang = new SimpleDateFormat("mm:ss");
         tvTimeEnd.setText(dinhdang.format(mp.getDuration()));
+        seekBarVolume.setMax(mp.getDuration());
+        seekArc.setProgress(mp.getDuration());
     }
 
 
-    public void Updatetime(){
+    public void Updatetime() {
 
-        final Handler handler=new Handler();
+        final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                SimpleDateFormat dingdang=new SimpleDateFormat("mm:ss");
+                SimpleDateFormat dingdang = new SimpleDateFormat("mm:ss");
                 tvTimeStart.setText(dingdang.format(mp.getCurrentPosition()));
-                //update progress seekbar
+                // update progress seekbar
+                seekBarVolume.setProgress(mp.getCurrentPosition());
                 seekArc.setProgress(mp.getCurrentPosition());
+
 
                 //kiểm tra thười gian kết thúc thì next bài
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        position++;
-                        if (position>size-1){
-                            position=0;
+                        if (size > 0) {
+                            if (mp.isPlaying() || mp != null) {
+                                mp.stop();
+                                mp.release();
+
+                            }
+                            if (position < size) {
+                                imgPlay.setImageResource(R.drawable.pause);
+                                position++;
+                                if (repeat == true) {
+                                    if (position == 0) {
+                                        position = size;
+                                    }
+                                    position -= 1;
+                                }
+                                if (random == true) {
+                                    Random random = new Random();
+                                    int index = random.nextInt(size);
+                                    if (index == position) {
+                                        position = index - 1;
+                                    }
+                                    position = index;
+                                }
+                                if (position > size - 1) {
+                                    position = 0;
+                                }
+                            }
                         }
-                        if (mp.isPlaying()){
-                            mp.stop();
-                            mp.release();
+                        imgPrevious.setClickable(false);
+                        imgNext.setClickable(false);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                imgPrevious.setClickable(true);
+                                imgNext.setClickable(true);
+                            }
+                        }, 3000);
+                        try {
+                            initialization1();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        initialization();
-                        mp.start();
+                        MediaPlayer mp1 = new MediaPlayer();
+                        mp1.start();
                         imgPlay.setImageResource(R.drawable.pause);
                         settimetotal();
                         Updatetime();
+
                     }
                 });
-                handler.postDelayed(this,500);
+                handler.postDelayed(this, 500);
             }
-        },100);
+        }, 100);
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             mp.stop();
-            mp.release();
             finish();
             return false;
         }
