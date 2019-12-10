@@ -50,8 +50,8 @@ public class PlayerActivity extends AppCompatActivity {
         Interactive();
         initialization();
         click();
-
         Glide.with(PlayerActivity.this).load(img).into(imgSinger);
+
     }
 
     private void innit() {
@@ -116,31 +116,31 @@ public class PlayerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (musicArrayList.size() > 0) {
+                if (size > 0) {
 
                     if (mp.isPlaying() || mp != null) {
                         mp.stop();
                         mp.release();
                         mp = null;
                     }
-                    if (position < musicArrayList.size()) {
+                    if (position < size) {
                         imgPlay.setImageResource(R.drawable.pause);
                         position++;
                         if (repeat == true) {
                             if (position == 0) {
-                                position = musicArrayList.size();
+                                position = size;
                             }
                             position -= 1;
                         }
                         if (random == true) {
                             Random random = new Random();
-                            int index = random.nextInt(musicArrayList.size());
+                            int index = random.nextInt(size);
                             if (index == position) {
                                 position = index - 1;
                             }
                             position = index;
                         }
-                        if (position > musicArrayList.size() - 1) {
+                        if (position > size - 1) {
                             position = 0;
                         }
                     }
@@ -155,7 +155,7 @@ public class PlayerActivity extends AppCompatActivity {
                         imgPrevious.setClickable(true);
                         imgNext.setClickable(true);
                     }
-                }, 3000);
+                }, 2000);
                 try {
                     initialization1();
                 } catch (IOException e) {
@@ -306,6 +306,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         tvTenBaiHat.setText(namesong);
         tvTenCaSi.setText(nameartist);
+        Glide.with(PlayerActivity.this).load(img).into(imgSinger);
     }
 
     public void initialization1() throws IOException {
@@ -317,7 +318,8 @@ public class PlayerActivity extends AppCompatActivity {
         imgSinger.startAnimation(animation);
         tvTenBaiHat.setText(musicArrayList.get(position).namesong);
         tvTenCaSi.setText(musicArrayList.get(position).nameartist);
-        Glide.with(PlayerActivity.this).load(img).into(imgSinger);
+        Glide.with(PlayerActivity.this).load(musicArrayList.get(position).image).into(imgSinger);
+
     }
 
     public void settimetotal() {
