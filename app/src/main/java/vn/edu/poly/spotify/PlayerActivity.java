@@ -1,15 +1,9 @@
 package vn.edu.poly.spotify;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -31,8 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
-import vn.edu.poly.spotify.Services.OnClearFromRecentService;
 import vn.edu.poly.spotify.ui.music.Music;
+import vn.edu.poly.spotify.ui.music.MusicFragment;
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class PlayerActivity extends AppCompatActivity {
     ImageView imgBack, imgSinger, imgPlay, imgPrevious, imgNext, imgShufle, imgRepeat;
@@ -42,10 +37,9 @@ public class PlayerActivity extends AppCompatActivity {
     SeekArc seekArc;
     Animation animation, animation1;
     ArrayList<Music> musicArrayList;
-    String data, namesong, nameartist, img;
+    String data, namesong, nameartist,img;
     int size, position, pos;
     boolean repeat = false, random = false;
-    NotificationManager notificationManager;
 
 
     @Override
@@ -56,51 +50,9 @@ public class PlayerActivity extends AppCompatActivity {
         Interactive();
         initialization();
         click();
-        CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position),
-                R.drawable.pause, position, size - 1);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannel();
-//            registerReceiver(broadcastReceiver, new IntentFilter("TRACKS_TRACKS"));
-//            startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
-        }
 
         Glide.with(PlayerActivity.this).load(img).into(imgSinger);
     }
-
-    private void createChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID,
-                    "KOD Dev", NotificationManager.IMPORTANCE_LOW);
-
-            notificationManager = getSystemService(NotificationManager.class);
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(channel);
-            }
-        }
-    }
-
-//    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getExtras().getString("actionname");
-//
-//            switch (action){
-//                case CreateNotification.ACTION_PREVIUOS:
-//                    onTrackPrevious();
-//                    break;
-//                case CreateNotification.ACTION_PLAY:
-//                    if (mp.isPlaying()){
-//                        onTrackPause();
-//                    } else {
-//                        onTrackPlay();
-//                    }
-//                    break;
-//                case CreateNotification.ACTION_NEXT:
-//                    onTrackNext();
-//                    break;
-//            }
-//        }
-//    };
 
     private void innit() {
         imgBack = findViewById(R.id.imgBack);
@@ -128,7 +80,7 @@ public class PlayerActivity extends AppCompatActivity {
         namesong = intent.getStringExtra("songname");
         data = intent.getStringExtra("data");
         nameartist = intent.getStringExtra("nameartist");
-        img = intent.getStringExtra("songimage");
+        img=intent.getStringExtra("songimage");
         size = intent.getIntExtra("size", 0);
         pos = intent.getIntExtra("pos", 0);
         Log.e("size", musicArrayList + "");
@@ -142,17 +94,12 @@ public class PlayerActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (mp.isPlaying()) {
-                    CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position),
-                            R.drawable.pause, position, size - 1);
-//                    onTrackPause();
                     mp.pause();
                     imgPlay.setImageResource(R.drawable.play);
                     imgSinger.startAnimation(animation1);
                     settimetotal();
                     Updatetime();
                 } else {
-
-//                    onTrackPlay();
                     mp.start();
                     imgPlay.setImageResource(R.drawable.pause);
                     imgSinger.startAnimation(animation);
@@ -197,7 +144,7 @@ public class PlayerActivity extends AppCompatActivity {
                             position = 0;
                         }
                     }
-                }
+               }
 
                 imgPrevious.setClickable(false);
                 imgNext.setClickable(false);
@@ -370,8 +317,7 @@ public class PlayerActivity extends AppCompatActivity {
         imgSinger.startAnimation(animation);
         tvTenBaiHat.setText(musicArrayList.get(position).namesong);
         tvTenCaSi.setText(musicArrayList.get(position).nameartist);
-        Glide.with(PlayerActivity.this).load(musicArrayList.get(position).image).into(imgSinger);
-
+        Glide.with(PlayerActivity.this).load(img).into(imgSinger);
     }
 
     public void settimetotal() {
@@ -463,38 +409,4 @@ public class PlayerActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-//
-//    @Override
-//    public void onTrackPrevious() {
-//
-//    }
-//
-//    @Override
-//    public void onTrackPlay() {
-//        CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position),
-//                R.drawable.pause, position, size-1);
-//
-////        isPlaying = true;
-//    }
-//
-//    @Override
-//    public void onTrackPause() {
-//        CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position),
-//                R.drawable.play, position, size-1);
-//    }
-//
-//    @Override
-//    public void onTrackNext() {
-//
-//    }
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-//            notificationManager.cancelAll();
-//        }
-//
-//        unregisterReceiver(broadcastReceiver);
-//    }
 }
