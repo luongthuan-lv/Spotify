@@ -1,18 +1,11 @@
-package vn.edu.poly.spotify.ui.music;
+package vn.edu.poly.spotify.ui.home;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,46 +17,44 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import vn.edu.poly.spotify.PlayerActivity;
 import vn.edu.poly.spotify.R;
-import vn.edu.poly.spotify.SongGenreActivity;
-import wseemann.media.FFmpegMediaMetadataRetriever;
+import vn.edu.poly.spotify.ui.music.AppDataBase;
+import vn.edu.poly.spotify.ui.music.Music;
 
-public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder> implements Filterable {
+public class SonggenreAdapter extends RecyclerView.Adapter<SonggenreAdapter.MusicHolder>  {
     public Context context;
     public List<Music> musicList;
-    public List<Music> musicListFull;
     public AppDataBase appDataBase;
 
 
-
-    public MusicAdapter(Context context, List<Music> musicList, AppDataBase appDataBase) {
+    public SonggenreAdapter(Context context, List<Music> musicList, AppDataBase appDataBase) {
         this.context = context;
         this.musicList = musicList;
         this.appDataBase = appDataBase;
-        musicListFull = new ArrayList<>(musicList);
 
     }
 
     public static class MusicHolder extends RecyclerView.ViewHolder {
         public ImageView imgArtist;
         public ImageView imgLove;
-        public TextView tvNameSong, tvNameArtist;
+        public TextView tvNameSong,tvNameArtist;
         public ConstraintLayout ctSong;
-
         public MusicHolder(@NonNull View itemView) {
             super(itemView);
-            imgArtist = itemView.findViewById(R.id.imgArtist);
-            imgLove = itemView.findViewById(R.id.imgLove);
-            tvNameSong = itemView.findViewById(R.id.tvNameSong);
-            tvNameArtist = itemView.findViewById(R.id.tvNameArtist);
-            ctSong = itemView.findViewById(R.id.ctSong);
+            imgArtist=itemView.findViewById(R.id.imgArtist);
+            imgLove=itemView.findViewById(R.id.imgLove);
+            tvNameSong=itemView.findViewById(R.id.tvNameSong);
+            tvNameArtist=itemView.findViewById(R.id.tvNameArtist);
+            ctSong=itemView.findViewById(R.id.ctSong);
+
+
+
+
         }
     }
-
     @NonNull
     @Override
     public MusicHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -72,20 +63,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
         return musicHolder;
     }
 
-    //    private void Bitmap(){
-//        final Music music = musicList.get(position);
-//        FFmpegMediaMetadataRetriever retriever = new FFmpegMediaMetadataRetriever();
-//        retriever.setDataSource(music.getImage());
-//        byte[] datas = retriever.getEmbeddedPicture();
-//        Bitmap bitmap = BitmapFactory.decodeByteArray(datas, 0, datas.length);
-//        retriever.release()
-//
-//    }
     @Override
     public void onBindViewHolder(@NonNull final MusicHolder holder, final int position) {
-
         final Music music = musicList.get(position);
-
         Glide.with(context).load(music.getImage()).into(holder.imgArtist);
         holder.tvNameSong.setText(music.getNamesong());
         holder.tvNameArtist.setText(music.getNameartist());
@@ -128,47 +108,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
         });
     }
 
-
     @Override
     public int getItemCount() {
         return musicList.size();
+
     }
-
-    @Override
-    public Filter getFilter() {
-        return bookHomeFilter;
-    }
-
-    private Filter bookHomeFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Music> filteredList = new ArrayList<>();
-            if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(musicListFull);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
-
-                for (Music item : musicListFull) {
-                    if (item.getNamesong().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(item);
-                    }
-                }
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-
-            return results;
-
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            musicList.clear();
-            musicList.addAll((List) results.values);
-            notifyDataSetChanged();
-        }
-    };
-
-
 }

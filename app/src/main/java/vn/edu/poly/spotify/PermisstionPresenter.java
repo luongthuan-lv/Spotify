@@ -17,7 +17,7 @@ public class PermisstionPresenter {
     public PermisstionPresenter(PermisstionView permisstionView) {
         this.permisstionView = permisstionView;
     }
-    void runtimePermisstion(){
+    public void runtimePermisstion(){
         Dexter.withActivity((Activity) permisstionView)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {

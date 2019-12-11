@@ -32,6 +32,11 @@ public class Music implements Serializable {
     public String album;
     public String genrename;
 
+
+
+
+
+
     public String getGenrename() {
         return genrename;
     }
