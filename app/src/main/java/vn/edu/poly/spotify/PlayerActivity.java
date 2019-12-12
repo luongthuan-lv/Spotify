@@ -213,7 +213,7 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
                 imgPlay.setImageResource(R.drawable.pause);
                 settimetotal();
                 Updatetime();
-
+                CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position), R.drawable.pause_black, position, size - 1);
             }
         });
 
@@ -256,6 +256,7 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
                 imgPlay.setImageResource(R.drawable.pause);
                 settimetotal();
                 Updatetime();
+                CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position), R.drawable.pause_black, position, size - 1);
 
             }
         });
@@ -425,9 +426,10 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
                         imgPlay.setImageResource(R.drawable.pause);
                         settimetotal();
                         Updatetime();
-
+                        CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position), R.drawable.pause_black, position, size - 1);
                     }
                 });
+
                 handler.postDelayed(this, 500);
             }
         }, 100);
