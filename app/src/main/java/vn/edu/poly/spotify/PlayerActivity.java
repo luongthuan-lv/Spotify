@@ -37,7 +37,7 @@ import vn.edu.poly.spotify.ui.music.Music;
 
 
 public class PlayerActivity extends AppCompatActivity implements Playable {
-    ImageView imgBack, imgSinger, imgPlay, imgPrevious, imgNext, imgShufle, imgRepeat;
+    ImageView imgSinger, imgPlay, imgPrevious, imgNext, imgShufle, imgRepeat;
     TextView tvTenBaiHat, tvTenCaSi, tvTimeStart, tvTimeEnd;
     SeekBar seekBarVolume;
     MediaPlayer mp;
@@ -101,7 +101,7 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
     };
 
     private void innit() {
-        imgBack = findViewById(R.id.imgBack);
+
         imgSinger = findViewById(R.id.imgSinger);
         imgPlay = findViewById(R.id.imgPlay);
         imgPrevious = findViewById(R.id.imgPrevious);
@@ -151,9 +151,9 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
                     Updatetime();
                 }
 
-                if (playing){
+                if (playing) {
                     onTrackPause();
-                }else {
+                } else {
                     onTrackPlay();
                 }
             }
@@ -320,15 +320,15 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
     public void initialization() {
         mp = new MediaPlayer();
         try {
-            position = pos;
-            mp.setDataSource(data);
-            mp.prepare();
-            mp.start();
-            imgPlay.setImageResource(R.drawable.pause);
-            imgSinger.startAnimation(animation);
-            Log.e("p00000000000", position + "");
-            settimetotal();
-            Updatetime();
+                position = pos;
+                mp.setDataSource(data);
+                mp.prepare();
+                mp.start();
+                imgPlay.setImageResource(R.drawable.pause);
+                imgSinger.startAnimation(animation);
+                Log.e("p00000000000", position + "");
+                settimetotal();
+                Updatetime();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -480,7 +480,7 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
         imgPlay.setImageResource(R.drawable.pause);
         settimetotal();
         Updatetime();
-      CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
+        CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position), R.drawable.pause_black, position, size - 1);
     }
 
     @Override
@@ -493,8 +493,8 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
             settimetotal();
             Updatetime();
         }
-        playing=true;
-        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.play_black,position,size-1);
+        playing = true;
+        CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position), R.drawable.play_black, position, size - 1);
     }
 
     @Override
@@ -505,8 +505,8 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
         imgSinger.startAnimation(animation);
         settimetotal();
         Updatetime();
-        playing=false;
-        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
+        playing = false;
+        CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position), R.drawable.pause_black, position, size - 1);
 
     }
 
@@ -562,13 +562,13 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
         imgPlay.setImageResource(R.drawable.pause);
         settimetotal();
         Updatetime();
-        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
+        CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position), R.drawable.pause_black, position, size - 1);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManager.cancelAll();
         }
 
