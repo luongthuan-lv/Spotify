@@ -2,6 +2,7 @@ package vn.edu.poly.spotify.ui.music;
 
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -31,9 +32,6 @@ public class Music implements Serializable {
     public String playlist;
     public String album;
     public String genrename;
-
-
-
 
 
 

@@ -1,9 +1,15 @@
 package vn.edu.poly.spotify;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,20 +32,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
+import vn.edu.poly.spotify.Services.OnClearFromRecentService;
 import vn.edu.poly.spotify.ui.music.Music;
-import vn.edu.poly.spotify.ui.music.MusicFragment;
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
-public class PlayerActivity extends AppCompatActivity {
+
+public class PlayerActivity extends AppCompatActivity implements Playable {
     ImageView imgBack, imgSinger, imgPlay, imgPrevious, imgNext, imgShufle, imgRepeat;
     TextView tvTenBaiHat, tvTenCaSi, tvTimeStart, tvTimeEnd;
     SeekBar seekBarVolume;
     MediaPlayer mp;
     Animation animation, animation1;
     ArrayList<Music> musicArrayList;
-    String data, namesong, nameartist,img;
+    String data, namesong, nameartist, img;
     int size, position, pos;
-    boolean repeat = false, random = false;
+    boolean repeat = false, random = false, playing = false;
+    NotificationManager notificationManager;
 
 
     @Override
@@ -50,8 +58,47 @@ public class PlayerActivity extends AppCompatActivity {
         initialization();
         click();
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel();
+            registerReceiver(broadcastReceiver, new IntentFilter("TRACKS_TRACKS"));
+            startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
+        }
     }
+
+    private void createChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID,
+                    "Spotify", NotificationManager.IMPORTANCE_LOW);
+
+            notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getExtras().getString("actionname");
+            switch (action) {
+                case CreateNotification.ACTION_PREVIUOS:
+                    onTrackPrevious();
+                    break;
+                case CreateNotification.ACTION_PLAY:
+                    if (playing) {
+                        onTrackPause();
+                    } else {
+                        onTrackPlay();
+                    }
+                    break;
+                case CreateNotification.ACTION_NEXT:
+                    onTrackNext();
+                    break;
+
+            }
+        }
+    };
 
     private void innit() {
         imgBack = findViewById(R.id.imgBack);
@@ -65,8 +112,6 @@ public class PlayerActivity extends AppCompatActivity {
         tvTenCaSi = findViewById(R.id.tvTenCaSi);
         tvTimeStart = findViewById(R.id.tvTimeStart);
         tvTimeEnd = findViewById(R.id.tvTimeEnd);
-
-
         seekBarVolume = findViewById(R.id.seekBarVolume);
         animation = AnimationUtils.loadAnimation(this, R.anim.disc);
         animation1 = AnimationUtils.loadAnimation(this, R.anim.stopdisc);
@@ -79,7 +124,7 @@ public class PlayerActivity extends AppCompatActivity {
         namesong = intent.getStringExtra("songname");
         data = intent.getStringExtra("data");
         nameartist = intent.getStringExtra("nameartist");
-        img=intent.getStringExtra("songimage");
+        img = intent.getStringExtra("songimage");
         size = intent.getIntExtra("size", 0);
         pos = intent.getIntExtra("pos", 0);
         Log.e("size", musicArrayList + "");
@@ -106,7 +151,11 @@ public class PlayerActivity extends AppCompatActivity {
                     Updatetime();
                 }
 
-
+                if (playing){
+                    onTrackPause();
+                }else {
+                    onTrackPlay();
+                }
             }
         });
 
@@ -143,7 +192,7 @@ public class PlayerActivity extends AppCompatActivity {
                             position = 0;
                         }
                     }
-               }
+                }
 
                 imgPrevious.setClickable(false);
                 imgNext.setClickable(false);
@@ -287,6 +336,9 @@ public class PlayerActivity extends AppCompatActivity {
         Glide.with(PlayerActivity.this).load(img).into(imgSinger);
         tvTenBaiHat.setText(namesong);
         tvTenCaSi.setText(nameartist);
+
+        CreateNotification.createNotification(PlayerActivity.this, musicArrayList.get(position), R.drawable.pause_black, 1, size - 1);
+
     }
 
     public void initialization1() throws IOException {
@@ -319,7 +371,6 @@ public class PlayerActivity extends AppCompatActivity {
                 tvTimeStart.setText(dingdang.format(mp.getCurrentPosition()));
                 // update progress seekbar
                 seekBarVolume.setProgress(mp.getCurrentPosition());
-
 
 
                 //kiểm tra thười gian kết thúc thì next bài
@@ -389,5 +440,136 @@ public class PlayerActivity extends AppCompatActivity {
             return false;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onTrackPrevious() {
+        if (size > 0) {
+
+            if (mp.isPlaying() || mp != null) {
+                mp.stop();
+                mp.release();
+                mp = null;
+            }
+            if (position < size) {
+                imgPlay.setImageResource(R.drawable.pause);
+                position--;
+                if (position < 0) {
+                    position = size - 1;
+                }
+                if (repeat == true) {
+                    position += 1;
+                }
+                if (random == true) {
+                    Random random = new Random();
+                    int index = random.nextInt(size);
+                    if (index == position) {
+                        position = index - 1;
+                    }
+                    position = index;
+                }
+            }
+        }
+
+        try {
+            initialization1();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mp.start();
+        imgPlay.setImageResource(R.drawable.pause);
+        settimetotal();
+        Updatetime();
+      CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
+    }
+
+    @Override
+    public void onTrackPlay() {
+        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.play_black,position,size-1);
+        if (mp.isPlaying()) {
+            mp.pause();
+            imgPlay.setImageResource(R.drawable.play);
+            imgSinger.startAnimation(animation1);
+            settimetotal();
+            Updatetime();
+        }
+        playing=true;
+
+    }
+
+    @Override
+    public void onTrackPause() {
+        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
+
+        mp.start();
+        imgPlay.setImageResource(R.drawable.pause);
+        imgSinger.startAnimation(animation);
+        settimetotal();
+        Updatetime();
+        playing=false;
+    }
+
+    @Override
+    public void onTrackNext() {
+        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
+        if (musicArrayList.size() > 0) {
+
+            if (mp.isPlaying() || mp != null) {
+                mp.stop();
+                mp.release();
+                mp = null;
+            }
+            if (position < musicArrayList.size()) {
+                imgPlay.setImageResource(R.drawable.pause);
+                position++;
+                if (repeat == true) {
+                    if (position == 0) {
+                        position = musicArrayList.size();
+                    }
+                    position -= 1;
+                }
+                if (random == true) {
+                    Random random = new Random();
+                    int index = random.nextInt(musicArrayList.size());
+                    if (index == position) {
+                        position = index - 1;
+                    }
+                    position = index;
+                }
+                if (position > musicArrayList.size() - 1) {
+                    position = 0;
+                }
+            }
+        }
+
+        imgPrevious.setClickable(false);
+        imgNext.setClickable(false);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imgPrevious.setClickable(true);
+                imgNext.setClickable(true);
+            }
+        }, 1000);
+        try {
+            initialization1();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mp.start();
+        imgPlay.setImageResource(R.drawable.pause);
+        settimetotal();
+        Updatetime();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            notificationManager.cancelAll();
+        }
+
+        unregisterReceiver(broadcastReceiver);
     }
 }

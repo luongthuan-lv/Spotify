@@ -154,6 +154,7 @@ public class MusicFragment extends Fragment {
 
                 int albumId = mediaCursor.getInt(mediaCursor.getColumnIndex(MediaStore.Audio.Genres.Members.ALBUM_ID));
                 music.setImage(String.valueOf(getAlbumArtUri(albumId)));
+
                 music.setNamesong(name);
                 music.setAlbum(album);
                 music.setNameartist(artist);
