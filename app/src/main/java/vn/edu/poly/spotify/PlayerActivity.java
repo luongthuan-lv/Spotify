@@ -485,7 +485,7 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
 
     @Override
     public void onTrackPlay() {
-        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.play_black,position,size-1);
+
         if (mp.isPlaying()) {
             mp.pause();
             imgPlay.setImageResource(R.drawable.play);
@@ -494,12 +494,11 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
             Updatetime();
         }
         playing=true;
-
+        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.play_black,position,size-1);
     }
 
     @Override
     public void onTrackPause() {
-        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
 
         mp.start();
         imgPlay.setImageResource(R.drawable.pause);
@@ -507,11 +506,13 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
         settimetotal();
         Updatetime();
         playing=false;
+        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
+
     }
 
     @Override
     public void onTrackNext() {
-        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
+
         if (musicArrayList.size() > 0) {
 
             if (mp.isPlaying() || mp != null) {
@@ -561,6 +562,7 @@ public class PlayerActivity extends AppCompatActivity implements Playable {
         imgPlay.setImageResource(R.drawable.pause);
         settimetotal();
         Updatetime();
+        CreateNotification.createNotification(PlayerActivity.this,musicArrayList.get(position),R.drawable.pause_black,position,size-1);
     }
 
     @Override
