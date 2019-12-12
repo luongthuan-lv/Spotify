@@ -1,6 +1,7 @@
 package vn.edu.poly.spotify.ui.music;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
@@ -34,6 +35,9 @@ public class Music implements Serializable {
     public String genrename;
 
 
+//    public Music(Context context) {
+//        this.context = context;
+//    }
 
     public String getGenrename() {
         return genrename;
