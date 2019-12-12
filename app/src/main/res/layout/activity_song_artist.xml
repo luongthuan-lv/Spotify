@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SongAlbumActivity">
+    tools:context=".SongArtistActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSongAlbum"
+        android:id="@+id/rvArtistfg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"

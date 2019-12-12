@@ -1,4 +1,4 @@
-package vn.edu.poly.spotify.ui.home;
+package vn.edu.poly.spotify;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,7 +17,8 @@ import android.provider.MediaStore;
 import java.util.ArrayList;
 import java.util.List;
 
-import vn.edu.poly.spotify.R;
+import vn.edu.poly.spotify.ui.home.Album;
+import vn.edu.poly.spotify.ui.home.SonggenreAdapter;
 import vn.edu.poly.spotify.ui.music.AppDataBase;
 import vn.edu.poly.spotify.ui.music.Music;
 
@@ -73,7 +74,7 @@ public class SongAlbumActivity extends AppCompatActivity {
 
                     if (album.getId_album() > 0) {
                         selection = selection + " and album_id = " + album.getId_album();
-                    }
+                }
                     Uri uri1 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                     String[] projection = new String[]{
                             MediaStore.Audio.Media.TITLE,

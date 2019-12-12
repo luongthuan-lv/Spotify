@@ -2,7 +2,6 @@ package vn.edu.poly.spotify.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 import vn.edu.poly.spotify.R;
+import vn.edu.poly.spotify.SongAlbumActivity;
 
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumHolder> {
@@ -39,10 +38,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumHolder> {
     public void onBindViewHolder(@NonNull AlbumHolder holder, int position) {
 
         final Album album = albumList.get(position);
-        holder.tvSong.setText(album.getName_album());
-        holder.tvArtist.setText(album.getName_artist());
-        Glide.with(context).load(album.getImage_album()).into(holder.imgPicture);
-        holder.cvAlbum.setOnClickListener(new View.OnClickListener() {
+        holder.tvSongs.setText(album.getName_album());
+        holder.tvArtists.setText(album.getName_artist());
+        Glide.with(context).load(album.getImage_album()).into(holder.imgPictures);
+        holder.cvAlbums.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SongAlbumActivity.class);

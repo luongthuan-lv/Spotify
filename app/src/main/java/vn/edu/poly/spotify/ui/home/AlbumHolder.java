@@ -11,17 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import vn.edu.poly.spotify.R;
 
-class AlbumHolder extends RecyclerView.ViewHolder {
-    CardView cvAlbum;
-    ImageView imgPicture;
-    TextView tvSong,tvArtist;
+public class AlbumHolder extends RecyclerView.ViewHolder {
+    CardView cvAlbums;
+    ImageView imgPictures;
+    TextView tvSongs,tvArtists;
 
     public AlbumHolder(@NonNull View itemView) {
         super(itemView);
-        cvAlbum=itemView.findViewById(R.id.cvAlbum);
-        imgPicture=itemView.findViewById(R.id.imgPicture);
-        tvSong=itemView.findViewById(R.id.tvSong);
-        tvArtist=itemView.findViewById(R.id.tvArtist);
+        cvAlbums=itemView.findViewById(R.id.cvAlbums);
+        imgPictures=itemView.findViewById(R.id.imgPictures);
+        tvSongs=itemView.findViewById(R.id.tvSongs);
+        tvArtists=itemView.findViewById(R.id.tvArtists);
 
     }
 }

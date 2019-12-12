@@ -38,38 +38,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTenBaiHat" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgSinger"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        android:layout_marginTop="60dp"
-        android:src="@drawable/sontung"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTenCaSi" />
 
-    <com.triggertrap.seekarc.SeekArc
-        android:id="@+id/seekArc"
-        rotation="360"
-        startAngle="0"
-        sweepAngle="300"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="21dp"
-        android:padding="60dp"
+    <LinearLayout
+        android:layout_width="235dp"
+        android:layout_height="235dp"
+        android:layout_marginTop="157dp"
+        android:background="@drawable/oval_bg_photo"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTenCaSi" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvTimeStart"
@@ -79,7 +66,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:text="00:00"
-        app:layout_constraintEnd_toStartOf="@+id/seekArc"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBarVolume" />
 
@@ -94,30 +81,30 @@
         android:text="00:00"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.644"
-        app:layout_constraintStart_toEndOf="@+id/seekArc"
+
         app:layout_constraintTop_toBottomOf="@+id/seekBarVolume" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgPlay"
         android:layout_width="65dp"
         android:layout_height="65dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="65dp"
         android:src="@drawable/play"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekArc" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBarVolume" />
 
     <ImageView
         android:id="@+id/imgPrevious"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="115dp"
+        android:layout_marginTop="78dp"
         app:layout_constraintEnd_toStartOf="@+id/imgPlay"
         app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekArc"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarVolume"
         app:srcCompat="@drawable/previous"
         tools:ignore="VectorDrawableCompat" />
 
@@ -125,11 +112,11 @@
         android:id="@+id/imgNext"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="115dp"
+        android:layout_marginTop="78dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.413"
         app:layout_constraintStart_toEndOf="@+id/imgPlay"
-        app:layout_constraintTop_toBottomOf="@+id/seekArc"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarVolume"
         app:srcCompat="@drawable/next"
         tools:ignore="VectorDrawableCompat" />
 
@@ -169,6 +156,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgSinger" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgSinger"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="90dp"
+        android:elevation="1dp"
+        android:src="@drawable/sontung"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTenCaSi" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

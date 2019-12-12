@@ -120,7 +120,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
                         Toast.makeText(context, "Lỗi khi thích bài hát: " + music.namesong, Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
-                    Toast.makeText(context, "Bạn đã thích bài hát: " + music.namesong, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Bạn đã thích bài hát này ", Toast.LENGTH_SHORT).show();
                 }
 
 

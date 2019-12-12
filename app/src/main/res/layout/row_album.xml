@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:backgroundTint="@color/colorPrimary"
         app:cardCornerRadius="10dp"
-        android:id="@+id/cvAlbum"
+        android:id="@+id/cvAlbums"
         android:layout_width="160dp"
         android:layout_height="220dp"
         android:layout_marginStart="8dp"
@@ -26,7 +26,7 @@
 
             <ImageView
                 android:scaleType="center"
-                android:id="@+id/imgPicture"
+                android:id="@+id/imgPictures"
                 android:layout_width="160dp"
                 android:layout_height="150dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,7 @@
                 tools:ignore="VectorDrawableCompat" />
 
             <TextView
-                android:id="@+id/tvSong"
+                android:id="@+id/tvSongs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -53,7 +53,7 @@
             <TextView
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:id="@+id/tvArtist"
+                android:id="@+id/tvArtists"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"

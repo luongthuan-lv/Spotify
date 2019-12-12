@@ -34,7 +34,6 @@ public class PlayerActivity extends AppCompatActivity {
     TextView tvTenBaiHat, tvTenCaSi, tvTimeStart, tvTimeEnd;
     SeekBar seekBarVolume;
     MediaPlayer mp;
-    SeekArc seekArc;
     Animation animation, animation1;
     ArrayList<Music> musicArrayList;
     String data, namesong, nameartist,img;
@@ -51,7 +50,7 @@ public class PlayerActivity extends AppCompatActivity {
         initialization();
         click();
 
-        Glide.with(PlayerActivity.this).load(img).into(imgSinger);
+
     }
 
     private void innit() {
@@ -66,7 +65,7 @@ public class PlayerActivity extends AppCompatActivity {
         tvTenCaSi = findViewById(R.id.tvTenCaSi);
         tvTimeStart = findViewById(R.id.tvTimeStart);
         tvTimeEnd = findViewById(R.id.tvTimeEnd);
-        seekArc = findViewById(R.id.seekArc);
+
 
         seekBarVolume = findViewById(R.id.seekBarVolume);
         animation = AnimationUtils.loadAnimation(this, R.anim.disc);
@@ -155,7 +154,7 @@ public class PlayerActivity extends AppCompatActivity {
                         imgPrevious.setClickable(true);
                         imgNext.setClickable(true);
                     }
-                }, 3000);
+                }, 1000);
                 try {
                     initialization1();
                 } catch (IOException e) {
@@ -250,24 +249,6 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
-        seekArc.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
-            @Override
-            public void onProgressChanged(SeekArc seekArc, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekArc seekArc) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekArc seekAra) {
-                mp.seekTo(seekArc.getArcRotation());
-
-            }
-        });
-
         seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -303,7 +284,7 @@ public class PlayerActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        Glide.with(PlayerActivity.this).load(img).into(imgSinger);
         tvTenBaiHat.setText(namesong);
         tvTenCaSi.setText(nameartist);
     }
@@ -317,14 +298,14 @@ public class PlayerActivity extends AppCompatActivity {
         imgSinger.startAnimation(animation);
         tvTenBaiHat.setText(musicArrayList.get(position).namesong);
         tvTenCaSi.setText(musicArrayList.get(position).nameartist);
-        Glide.with(PlayerActivity.this).load(img).into(imgSinger);
+        Glide.with(PlayerActivity.this).load(musicArrayList.get(position).image).into(imgSinger);
     }
 
     public void settimetotal() {
         SimpleDateFormat dinhdang = new SimpleDateFormat("mm:ss");
         tvTimeEnd.setText(dinhdang.format(mp.getDuration()));
         seekBarVolume.setMax(mp.getDuration());
-        seekArc.setProgress(mp.getDuration());
+
     }
 
 
@@ -338,7 +319,7 @@ public class PlayerActivity extends AppCompatActivity {
                 tvTimeStart.setText(dingdang.format(mp.getCurrentPosition()));
                 // update progress seekbar
                 seekBarVolume.setProgress(mp.getCurrentPosition());
-                seekArc.setProgress(mp.getCurrentPosition());
+
 
 
                 //kiểm tra thười gian kết thúc thì next bài

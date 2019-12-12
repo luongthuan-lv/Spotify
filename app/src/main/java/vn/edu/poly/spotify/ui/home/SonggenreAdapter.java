@@ -23,6 +23,7 @@ import vn.edu.poly.spotify.PlayerActivity;
 import vn.edu.poly.spotify.R;
 import vn.edu.poly.spotify.ui.music.AppDataBase;
 import vn.edu.poly.spotify.ui.music.Music;
+import vn.edu.poly.spotify.ui.music.MusicAdapter;
 
 public class SonggenreAdapter extends RecyclerView.Adapter<SonggenreAdapter.MusicHolder>  {
     public Context context;
@@ -49,10 +50,6 @@ public class SonggenreAdapter extends RecyclerView.Adapter<SonggenreAdapter.Musi
             tvNameSong=itemView.findViewById(R.id.tvNameSong);
             tvNameArtist=itemView.findViewById(R.id.tvNameArtist);
             ctSong=itemView.findViewById(R.id.ctSong);
-
-
-
-
         }
     }
     @NonNull

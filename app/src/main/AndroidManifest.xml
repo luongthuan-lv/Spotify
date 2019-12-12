@@ -12,19 +12,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.home.SongAlbumActivity"></activity>
-        <activity android:name=".ui.loading.LoadActivity">
+        <activity android:name=".SongArtistActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".SongAlbumActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.loading.LoadActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SongGenreActivity" />
+        <activity android:name=".SongGenreActivity" android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"></activity>
-        <activity android:name=".PlayerActivity" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PlayerActivity" android:screenOrientation="portrait"/>
+
 
         <receiver android:name=".Services.NotificationActionService" />
 

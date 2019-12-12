@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cvGenre"
+        android:id="@+id/cvArtist"
         android:layout_width="160dp"
         android:layout_height="200dp"
         android:layout_marginStart="8dp"
@@ -26,7 +26,7 @@
 
 
             <ImageView
-                android:id="@+id/imgCover_Genre"
+                android:id="@+id/imgCover_Artist"
                 android:layout_width="160dp"
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
@@ -37,7 +37,7 @@
                 tools:ignore="VectorDrawableCompat" />
 
             <TextView
-                android:id="@+id/tvNameGenre"
+                android:id="@+id/tvArtistfg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -48,7 +48,7 @@
                 android:maxLines="1"
                 android:text="Mình là gì của nhau"
                 android:textColor="#FFFFFF"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent" />
 

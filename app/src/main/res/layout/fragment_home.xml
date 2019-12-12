@@ -14,11 +14,6 @@
         <fragment
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:name="vn.edu.poly.spotify.ui.home.PlayListFragment"
-            android:id="@+id/playlist_fragment"/>
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:name="vn.edu.poly.spotify.ui.home.ChudeTheloaiFragment"
             android:id="@+id/chude_fragment"/>
         <fragment
